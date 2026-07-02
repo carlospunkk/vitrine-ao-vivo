@@ -20,7 +20,7 @@
     font-family: 'Inter', -apple-system, sans-serif;
     background: var(--bg);
     color: var(--text);
-    padding: 40px 20px 60px;
+    padding: 24px 14px 40px; /* Reduzido para encaixar melhor em celulares */
     min-height: 100vh;
     position: relative;
     overflow: hidden;
@@ -50,7 +50,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
   .dot {
     width: 8px; height: 8px; border-radius: 50%;
@@ -72,8 +72,8 @@
   h1.vitrine-title {
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
-    font-size: 40px;
-    line-height: 1.15;
+    font-size: 28px; /* Mobile-First: Começa menor para celular */
+    line-height: 1.2;
     margin: 0 0 12px;
     letter-spacing: -0.01em;
   }
@@ -81,20 +81,20 @@
 
   .vitrine-sub {
     color: var(--muted);
-    font-size: 15px;
+    font-size: 14px;
     max-width: 580px;
-    margin: 0 0 32px;
-    line-height: 1.6;
+    margin: 0 0 28px;
+    line-height: 1.5;
   }
 
   /* ---- ATALHOS RAPIDOS ---- */
   .shortcuts-section {
-    margin-bottom: 40px;
+    margin-bottom: 28px;
   }
   .shortcuts-grid {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
   }
   .shortcut-card {
     display: flex;
@@ -104,12 +104,12 @@
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--radius);
-    padding: 14px 20px;
+    padding: 12px 16px;
     text-decoration: none;
     color: var(--text);
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
-    font-size: 16px;
+    font-size: 15px;
     transition: transform .15s ease, border-color .15s ease, background .15s ease;
   }
   .shortcut-card:hover {
@@ -118,9 +118,9 @@
     background: var(--surface-2);
   }
   .shortcut-icon {
-    font-size: 22px;
-    width: 40px;
-    height: 40px;
+    font-size: 20px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -134,11 +134,15 @@
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--radius);
-    padding: 22px;
-    margin-bottom: 40px;
+    padding: 16px;
+    margin-bottom: 32px;
   }
-  .form-row { display: flex; gap: 12px; flex-wrap: wrap; }
-  .field { flex: 1 1 100%; display: flex; flex-direction: column; gap: 6px; }
+  .form-row { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 12px; 
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; width: 100%; }
   .field label {
     font-family: 'JetBrains Mono', monospace;
     font-size: 10.5px;
@@ -158,11 +162,12 @@
     transition: border-color .15s ease;
     width: 100%;
     height: 44px;
+    -webkit-appearance: none; /* Remove estilos padrão do Safari no iOS */
   }
   .field input:focus, .field select:focus { border-color: var(--coral); }
   .field input::placeholder { color: #5C5766; }
 
-  .form-actions { margin-top: 16px; display: flex; align-items: center; gap: 12px; }
+  .form-actions { margin-top: 16px; display: flex; flex-direction: column; gap: 12px; width: 100%; }
 
   .btn-primary {
     background: var(--coral);
@@ -176,11 +181,12 @@
     transition: transform .12s ease, background .15s ease;
     font-family: inherit;
     height: 44px;
+    width: 100%;
   }
   .btn-primary:hover { background: #FF6E4E; transform: translateY(-1px); }
   .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-  .form-msg { font-size: 13px; color: var(--muted); }
+  .form-msg { font-size: 13px; color: var(--muted); text-align: center; }
   .form-msg.error { color: #FF8A70; }
 
   /* ---- FILTROS ---- */
@@ -189,9 +195,10 @@
     gap: 8px;
     margin-bottom: 20px;
     overflow-x: auto;
-    padding-bottom: 4px;
+    padding-bottom: 6px;
+    scrollbar-width: none; /* Firefox */
   }
-  .filter-bar::-webkit-scrollbar { display: none; } /* Esconde scrollbar no mobile */
+  .filter-bar::-webkit-scrollbar { display: none; } /* Chrome/Safari */
   
   .btn-filter {
     background: var(--surface);
@@ -206,10 +213,6 @@
     transition: all 0.15s ease;
     white-space: nowrap;
   }
-  .btn-filter:hover {
-    border-color: #4A4351;
-    color: var(--text);
-  }
   .btn-filter.active {
     background: var(--text);
     color: var(--bg);
@@ -220,7 +223,7 @@
   /* ---- LIST ---- */
   .list-header {
     display: flex; align-items: baseline; justify-content: space-between;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
   .list-header h2 {
     font-family: 'Space Grotesk', sans-serif;
@@ -234,28 +237,41 @@
   .grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 14px;
+    gap: 12px;
   }
 
+  /* ---- CARDS TOTALMENTE RESPONSIVOS ---- */
   .card {
     background: var(--surface);
     border: 1px solid var(--line);
     border-top: 3px solid var(--coral);
     border-radius: var(--radius);
-    padding: 16px;
+    padding: 14px;
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    transition: border-color .15s ease, transform .15s ease;
+    gap: 12px;
   }
-  .card.card-tiktok {
-    border-top: 3px solid var(--tiktok-pink);
-  }
-  .card:hover { border-color: #4A4351; transform: translateY(-2px); }
+  .card.card-tiktok { border-top: 3px solid var(--tiktok-pink); }
 
-  .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
-  .card-head { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
+  .card-top { 
+    display: flex; 
+    flex-direction: column; /* Empilha topo no mobile para não esmagar */
+    align-items: flex-start; 
+    gap: 12px; 
+    width: 100%;
+  }
+  .card-head { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    width: 100%; 
+    min-width: 0;
+  }
+  .card-info-block {
+    flex: 1;
+    min-width: 0; /* Impede quebra de layout por textos longos */
+  }
 
   .avatar {
     width: 44px;
@@ -284,30 +300,20 @@
     background: rgba(255,90,54,0.12);
     border: 1px solid rgba(255,90,54,0.35);
     border-radius: 999px;
-    padding: 3px 8px;
-    display: flex; align-items: center; gap: 6px;
+    padding: 4px 10px;
+    display: flex; 
+    align-items: center; 
+    gap: 6px;
     white-space: nowrap;
-    flex: 0 0 auto;
+    align-self: flex-start; /* Garante que não estique */
   }
   .badge-live .dot { width: 6px; height: 6px; }
-
   .badge-live.badge-tiktok {
     color: var(--tiktok-pink);
     background: rgba(254,44,85,0.12);
     border: 1px solid rgba(254,44,85,0.35);
   }
   .badge-live.badge-tiktok .dot { background: var(--tiktok-pink); animation: pulse-tiktok 1.8s infinite; }
-
-  .plataforma-tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.05em;
-    padding: 2px 7px;
-    border-radius: 999px;
-    font-weight: 600;
-  }
-  .plataforma-tag.tag-shopee { background: rgba(255,90,54,0.15); color: var(--coral); }
-  .plataforma-tag.tag-tiktok { background: rgba(254,44,85,0.15); color: var(--tiktok-pink); }
 
   .card-loja {
     font-family: 'Space Grotesk', sans-serif;
@@ -317,33 +323,42 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 140px;
     display: block;
+    width: 100%;
   }
 
   .card-meta {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--muted);
     display: flex;
     gap: 6px;
     align-items: center;
-    margin-top: 4px;
-    flex-wrap: wrap;
+    margin-top: 6px;
+    flex-wrap: wrap; /* Permite que as tags pulem linha no celular se faltar espaço */
   }
+  .plataforma-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    padding: 2px 6px;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+  .plataforma-tag.tag-shopee { background: rgba(255,90,54,0.15); color: var(--coral); }
+  .plataforma-tag.tag-tiktok { background: rgba(254,44,85,0.15); color: var(--tiktok-pink); }
+  
   .categoria-pill {
     background: var(--surface-2);
-    padding: 2px 8px;
+    padding: 2px 6px;
     border-radius: 999px;
-    font-size: 11px;
   }
   .card-timer {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 11.5px;
     color: var(--yellow);
     background: rgba(255,200,69,0.08);
     padding: 2px 6px;
     border-radius: 4px;
     border: 1px solid rgba(255,200,69,0.15);
+    white-space: nowrap;
   }
 
   .clique-stat {
@@ -352,38 +367,11 @@
     gap: 4px;
     font-size: 12px;
     color: var(--muted);
-    margin-top: 6px;
+    margin-top: 4px;
   }
   .clique-stat strong { color: var(--yellow); font-weight: 700; }
 
-  .cheia-aviso {
-    display: none;
-    background: rgba(255, 200, 69, 0.1);
-    border: 1px solid rgba(255, 200, 69, 0.35);
-    border-radius: 10px;
-    padding: 10px 12px;
-    font-size: 12px;
-    color: var(--text);
-    line-height: 1.4;
-  }
-  .cheia-aviso.show { display: block; }
-  .cheia-aviso strong { color: var(--yellow); }
-  .cheia-aviso button {
-    margin-top: 8px;
-    width: 100%;
-    background: var(--yellow);
-    color: #1A1416;
-    border: none;
-    border-radius: 7px;
-    padding: 8px 10px;
-    font-weight: 700;
-    font-size: 12.5px;
-    cursor: pointer;
-    font-family: inherit;
-  }
-  .cheia-aviso button:hover { background: #FFD666; }
-
-  .card-actions { display: flex; gap: 8px; margin-top: auto; }
+  .card-actions { display: flex; gap: 8px; margin-top: 4px; width: 100%; }
 
   .btn-join {
     flex: 1;
@@ -391,28 +379,27 @@
     color: #1A1416;
     border: none;
     border-radius: 8px;
-    padding: 11px 12px;
+    padding: 12px;
     font-weight: 700;
     font-size: 13px;
-    cursor: pointer;
     text-align: center;
     text-decoration: none;
     display: block;
-    transition: background .15s ease;
+    height: 42px;
   }
-  .btn-join:hover { background: #FFD666; }
-
   .btn-remove {
     background: transparent;
     border: 1px solid var(--line);
     color: var(--muted);
     border-radius: 8px;
-    padding: 10px 14px;
+    padding: 0 14px;
     cursor: pointer;
-    font-size: 12px;
-    font-family: inherit;
+    font-size: 14px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .btn-remove:hover { border-color: #FF8A70; color: #FF8A70; }
 
   .remove-panel {
     display: none;
@@ -422,29 +409,28 @@
     border: 1px solid var(--line);
     border-radius: 10px;
     padding: 12px;
-    margin-top: 2px;
   }
   .remove-panel.open { display: flex; }
   .remove-panel input {
     background: var(--bg);
     border: 1px solid var(--line);
     border-radius: 6px;
-    padding: 8px 10px;
+    padding: 10px;
     color: var(--text);
     font-size: 13px;
-    font-family: inherit;
+    height: 40px;
     outline: none;
+    width: 100%;
   }
-  .remove-panel input:focus { border-color: var(--coral); }
   .remove-panel-actions { display: flex; gap: 8px; }
   .remove-panel-actions button {
     flex: 1;
     border-radius: 6px;
-    padding: 8px 10px;
+    height: 38px;
     font-size: 12px;
-    font-family: inherit;
     cursor: pointer;
     border: none;
+    font-family: inherit;
   }
   .remove-confirm { background: #FF5A36; color: #1A1416; font-weight: 700; }
   .remove-cancel { background: transparent; border: 1px solid var(--line) !important; color: var(--muted); }
@@ -453,7 +439,7 @@
   .empty-state {
     border: 1px dashed var(--line);
     border-radius: var(--radius);
-    padding: 40px 20px;
+    padding: 32px 16px;
     text-align: center;
     color: var(--muted);
     font-size: 14px;
@@ -461,48 +447,29 @@
   }
   .empty-state strong { color: var(--text); display: block; margin-bottom: 6px; font-family: 'Space Grotesk', sans-serif; font-size: 16px; }
 
-  .footnote {
-    margin-top: 30px;
-    font-size: 12px;
-    color: #5C5766;
-    text-align: center;
-    line-height: 1.4;
-  }
+  .footnote { margin-top: 24px; font-size: 12px; color: #5C5766; text-align: center; line-height: 1.4; }
 
   /* ==========================================================================
-     MEDIA QUERIES (A MÁGICA DA RESPONSIVIDADE)
+     MEDIA QUERIES - ATIVA O LAYOUT DESKTOP AUTOMATICAMENTE EM TELAS MAIORES
      ========================================================================== */
-  
-  /* Celulares Médios e Grandes / Tablets (A partir daqui vira comportamento Desktop) */
-  @media (min-width: 580px) {
-    .shortcuts-grid {
-      flex-direction: row;
-    }
-    .field {
-      flex: 1 1 180px;
-    }
-    .form-actions {
-      width: auto;
-    }
-    .btn-primary {
-      width: auto;
-    }
-    .grid {
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 16px;
-    }
-    .card-loja {
-      max-width: 160px;
-    }
-  }
+  @media (min-width: 640px) {
+    .vitrine-root { padding: 40px 20px 60px; }
+    h1.vitrine-title { font-size: 40px; }
+    .vitrine-sub { font-size: 15px; margin-bottom: 32px; }
+    
+    .shortcuts-grid { flex-direction: row; gap: 16px; }
+    .shortcut-card { flex: 1; padding: 16px 24px; }
+    
+    .form-card { padding: 22px; }
+    .form-row { flex-direction: row; flex-wrap: wrap; }
+    .field { flex: 1 1 180px; width: auto; }
+    .form-actions { flex-direction: row; width: auto; }
+    .btn-primary { width: auto; }
 
-  /* Telas Mobile Pequenas (Garante que nada quebre em telas muito antigas) */
-  @media (max-width: 400px) {
-    .vitrine-root { padding: 24px 12px 40px; }
-    h1.vitrine-title { font-size: 26px; }
-    .card-top { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .card { padding: 18px; }
+    .card-top { flex-direction: row; justify-content: space-between; align-items: flex-start; }
     .badge-live { align-self: flex-start; }
-    .card-loja { max-width: 120px; }
   }
 </style>
 
@@ -522,11 +489,11 @@
 
     <div class="shortcuts-section">
       <div class="shortcuts-grid">
-        <a href="https://s.shopee.com.br/8AUBEWYUD5" target="_blank" rel="noopener noreferrer" class="shortcut-card sc-shopee">
+        <a href="https://s.shopee.com.br/AKYft6xjxX" target="_blank" rel="noopener noreferrer" class="shortcut-card sc-shopee">
           <div class="shortcut-icon">🛍️</div>
           <span>Site Shopee</span>
         </a>
-        <a href="https://s.shopee.com.br/6Aj6qwdskV" target="_blank" rel="noopener noreferrer" class="shortcut-card sc-cupons">
+        <a href="https://s.shopee.com.br/6pynijk0tp" target="_blank" rel="noopener noreferrer" class="shortcut-card sc-cupons">
           <div class="shortcut-icon">🎟️</div>
           <span>Cupons</span>
         </a>
@@ -784,7 +751,7 @@
         <div class="card-top">
           <div class="card-head">
             <div class="avatar-wrap"></div>
-            <div>
+            <div class="card-info-block">
               <div class="card-loja"></div>
               <div class="card-meta">
                 <span class="plataforma-tag ${ehTiktok ? 'tag-tiktok' : 'tag-shopee'}">${ehTiktok ? 'Live TikTok' : 'Live Shopee'}</span>
