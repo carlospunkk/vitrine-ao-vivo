@@ -1,550 +1,319 @@
-<style>
-  :root{
-    --bg: #17151A;
-    --surface: #211E25;
-    --surface-2: #2A262F;
-    --coral: #FF5A36;
-    --yellow: #FFC845;
-    --text: #F5F1EA;
-    --muted: #948FA0;
-    --line: #38333F;
-    --radius: 14px;
-    --tiktok-pink: #FE2C55;
-    --tiktok-cyan: #25F4EE;
-  }
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Vitrine ao Vivo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0D0C0F;
+      --surface: #1A181F;
+      --surface-2: #25222B;
+      --coral: #FF5A36;
+      --yellow: #FFC845;
+      --text: #F5F1EA;
+      --muted: #948FA0;
+      --line: #2F2A37;
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --tiktok-pink: #FE2C55;
+      --tiktok-cyan: #25F4EE;
+    }
 
-  * { box-sizing: border-box; }
-  html, body { overflow-x: hidden; max-width: 100%; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    html, body { 
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      overflow-x: hidden;
+      max-width: 100%;
+      min-height: 100vh;
+    }
 
-  .vitrine-root {
-    font-family: 'Inter', -apple-system, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    padding: 40px 20px 60px;
-    min-height: 100%;
-    border-radius: 20px;
-    position: relative;
-    overflow: hidden;
-  }
+    .vitrine-root {
+      max-width: 500px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--bg);
+      padding: 80px 16px 40px;
+      position: relative;
+    }
 
-  .vitrine-inner { max-width: 880px; margin: 0 auto; position: relative; z-index: 1; }
+    .hero-header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
 
-  .bg-icons {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-  .bg-icons svg {
-    position: absolute;
-    opacity: 0.05;
-  }
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--coral);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--coral);
+      box-shadow: 0 0 0 0 rgba(255,90,54,0.6);
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255,90,54,0.55); }
+      70% { box-shadow: 0 0 0 8px rgba(255,90,54,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,90,54,0); }
+    }
 
-  /* ---- HERO ---- */
-  .eyebrow {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--coral);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 14px;
-  }
-  .dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--coral);
-    box-shadow: 0 0 0 0 rgba(255,90,54,0.6);
-    animation: pulse 1.8s infinite;
-  }
-  @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(255,90,54,0.55); }
-    70% { box-shadow: 0 0 0 8px rgba(255,90,54,0); }
-    100% { box-shadow: 0 0 0 0 rgba(255,90,54,0); }
-  }
-  @keyframes pulse-tiktok {
-    0% { box-shadow: 0 0 0 0 rgba(254,44,85,0.55); }
-    70% { box-shadow: 0 0 0 8px rgba(254,44,85,0); }
-    100% { box-shadow: 0 0 0 0 rgba(254,44,85,0); }
-  }
+    .btn-atalho {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(255, 90, 54, 0.12);
+      color: var(--coral);
+      border: 1px solid rgba(255, 90, 54, 0.35);
+      border-radius: var(--radius-sm);
+      padding: 10px 16px;
+      font-weight: 700;
+      font-size: 13.5px;
+      text-decoration: none;
+      transition: background .15s ease, transform .12s ease;
+    }
+    .btn-atalho:hover {
+      background: rgba(255, 90, 54, 0.2);
+      transform: translateY(-1px);
+    }
 
-  h1.vitrine-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 40px;
-    line-height: 1.05;
-    margin: 0 0 12px;
-    letter-spacing: -0.01em;
-  }
-  h1.vitrine-title span { color: var(--coral); }
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      margin-bottom: 28px;
+    }
+    .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .field { flex: 1 1 100%; display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    .field:last-child { margin-bottom: 0; }
+    .field label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .field input, .field select {
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      color: var(--text);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color .15s ease;
+      width: 100%;
+    }
+    .field input:focus, .field select:focus { border-color: var(--coral); }
+    .field input::placeholder { color: #5C5766; }
 
-  .vitrine-sub {
-    color: var(--muted);
-    font-size: 15px;
-    max-width: 480px;
-    margin: 0 0 32px;
-    line-height: 1.5;
-  }
+    .form-actions { margin-top: 16px; display: flex; align-items: center; gap: 12px; }
 
-  /* ---- FORM ---- */
-  .form-card {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 22px;
-    margin-bottom: 40px;
-  }
-  .form-row { display: flex; gap: 12px; flex-wrap: wrap; }
-  .field { flex: 1 1 180px; display: flex; flex-direction: column; gap: 6px; }
-  .field label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10.5px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .field input, .field select {
-    background: var(--surface-2);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 11px 12px;
-    color: var(--text);
-    font-size: 14px;
-    font-family: inherit;
-    outline: none;
-    transition: border-color .15s ease;
-  }
-  .field input:focus, .field select:focus { border-color: var(--coral); }
-  .field input::placeholder { color: #5C5766; }
+    .btn-primary {
+      background: var(--coral);
+      color: #1A1416;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: inherit;
+      width: 100%;
+      transition: background .15s ease;
+    }
+    .btn-primary:hover { background: #FF6E4E; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  .form-actions { margin-top: 16px; display: flex; align-items: center; gap: 12px; }
+    .form-msg { font-size: 13px; color: var(--muted); }
+    .form-msg.error { color: #FF8A70; }
 
-  .btn-primary {
-    background: var(--coral);
-    color: #1A1416;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 20px;
-    font-weight: 700;
-    font-size: 14px;
-    cursor: pointer;
-    transition: transform .12s ease, background .15s ease;
-    font-family: inherit;
-  }
-  .btn-primary:hover { background: #FF6E4E; transform: translateY(-1px); }
-  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .list-header {
+      display: flex; flex-direction: column; gap: 12px;
+      margin-bottom: 16px;
+    }
+    .tabs-live { display: flex; gap: 6px; width: 100%; }
+    .tab-btn {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      padding: 10px 4px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 11.5px;
+      cursor: pointer;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all .15s ease;
+    }
+    .tab-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      background: var(--surface-2);
+      border-radius: 999px;
+      padding: 1px 6px;
+    }
+    .tab-btn[data-plataforma="todas"].active { color: var(--text); border-color: rgba(245,241,234,0.4); background: rgba(245,241,234,0.08); }
+    .tab-btn[data-plataforma="shopee"].active { color: var(--coral); border-color: rgba(255,90,54,0.4); background: rgba(255,90,54,0.08); }
+    .tab-btn[data-plataforma="tiktok"].active { color: var(--tiktok-pink); border-color: rgba(254,44,85,0.4); background: rgba(254,44,85,0.08); }
+    
+    .list-count { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted); align-self: flex-end; }
 
-  .form-msg { font-size: 13px; color: var(--muted); }
-  .form-msg.error { color: #FF8A70; }
+    .grid { display: flex; flex-direction: column; gap: 12px; }
 
-  /* ---- LIST ---- */
-  .list-header {
-    display: flex; align-items: baseline; justify-content: space-between;
-    margin-bottom: 16px;
-  }
-  .list-header h2 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 18px; margin: 0; font-weight: 700;
-  }
-  .list-count {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px; color: var(--muted);
-  }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--coral);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .card.card-tiktok { border-left: 4px solid var(--tiktok-pink); }
 
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 14px;
-  }
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    .card-head { display: flex; align-items: center; gap: 10px; min-width: 0; }
 
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-top: 3px solid var(--coral);
-    border-radius: var(--radius);
-    padding: 18px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    transition: border-color .15s ease, transform .15s ease;
-  }
-  .card.card-tiktok {
-    border-top: 3px solid var(--tiktok-pink);
-  }
-  .card:hover { border-color: #4A4351; transform: translateY(-2px); }
+    .avatar { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; background: var(--surface-2); border: 1px solid var(--line); }
+    .avatar-fallback { display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; color: #1A1416; }
 
-  .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+    .card-loja { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-meta { font-size: 11.5px; color: var(--muted); display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 2px; }
+    .plataforma-tag { font-family: 'JetBrains Mono', monospace; font-size: 9px; padding: 1px 5px; border-radius: 4px; font-weight: 600; }
+    .plataforma-tag.tag-shopee { background: rgba(255,90,54,0.12); color: var(--coral); }
+    .plataforma-tag.tag-tiktok { background: rgba(254,44,85,0.12); color: var(--tiktok-pink); }
+    .categoria-pill { background: var(--surface-2); padding: 1px 6px; border-radius: 4px; font-size: 10.5px; }
 
-  .card-head { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .badge-live { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--coral); background: rgba(255,90,54,0.1); border: 1px solid rgba(255,90,54,0.25); border-radius: 4px; padding: 2px 6px; display: flex; align-items: center; gap: 4px; }
+    .badge-live.badge-tiktok { color: var(--tiktok-pink); background: rgba(254,44,85,0.1); border: 1px solid rgba(254,44,85,0.25); }
 
-  .avatar {
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
-    flex: 0 0 auto;
-    object-fit: cover;
-    background: var(--surface-2);
-    border: 1px solid var(--line);
-  }
-  .avatar-fallback {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 16px;
-    color: #1A1416;
-  }
+    .clique-stat { font-size: 12px; color: var(--muted); }
+    .clique-stat strong { color: var(--yellow); }
 
-  .badge-live {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    color: var(--coral);
-    background: rgba(255,90,54,0.12);
-    border: 1px solid rgba(255,90,54,0.35);
-    border-radius: 999px;
-    padding: 3px 8px;
-    display: flex; align-items: center; gap: 6px;
-    white-space: nowrap;
-    flex: 0 0 auto;
-  }
-  .badge-live .dot { width: 6px; height: 6px; }
+    .cheia-aviso { display: none; background: rgba(255, 200, 69, 0.08); border: 1px solid rgba(255, 200, 69, 0.25); border-radius: 8px; padding: 10px; font-size: 12px; line-height: 1.4; }
+    .cheia-aviso.show { display: block; }
+    .cheia-aviso button { margin-top: 6px; width: 100%; background: var(--yellow); color: #1A1416; border: none; border-radius: 6px; padding: 8px; font-weight: 700; font-size: 12px; cursor: pointer; }
 
-  .badge-live.badge-tiktok {
-    color: var(--tiktok-pink);
-    background: rgba(254,44,85,0.12);
-    border: 1px solid rgba(254,44,85,0.35);
-  }
-  .badge-live.badge-tiktok .dot { background: var(--tiktok-pink); animation: pulse-tiktok 1.8s infinite; }
+    .card-actions { display: flex; gap: 8px; }
+    .btn-join { flex: 1; background: var(--yellow); color: #1A1416; border: none; border-radius: 8px; padding: 10px; font-weight: 700; font-size: 13px; text-align: center; text-decoration: none; display: block; }
+    .btn-join.disabled { background: var(--surface-2) !important; color: var(--muted) !important; cursor: not-allowed; border: 1px solid var(--line); pointer-events: none; }
+    .btn-remove { background: transparent; border: 1px solid var(--line); color: var(--muted); border-radius: 8px; padding: 10px 14px; cursor: pointer; }
 
-  .plataforma-tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.05em;
-    padding: 2px 7px;
-    border-radius: 999px;
-    font-weight: 600;
-  }
-  .plataforma-tag.tag-shopee { background: rgba(255,90,54,0.15); color: var(--coral); }
-  .plataforma-tag.tag-tiktok { background: rgba(254,44,85,0.15); color: var(--tiktok-pink); }
+    .remove-panel { display: none; flex-direction: column; gap: 8px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+    .remove-panel.open { display: flex; }
+    .remove-panel input { background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 8px; color: var(--text); font-size: 13px; outline: none; }
+    .remove-panel-actions { display: flex; gap: 6px; }
+    .remove-panel-actions button { flex: 1; border-radius: 6px; padding: 8px; font-size: 12px; cursor: pointer; border: none; }
+    .remove-confirm { background: #FF5A36; color: #1A1416; font-weight: 700; }
+    .remove-cancel { background: transparent; border: 1px solid var(--line) !important; color: var(--muted); }
+    .remove-error { font-size: 11.5px; color: #FF8A70; display: none; }
 
-  /* ---- CATEGORIAS ---- */
-  .cat-section { margin-bottom: 40px; }
-  .cat-section h2 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 19px;
-    font-weight: 700;
-    margin: 0 0 4px;
-  }
-  .cat-section .cat-sub {
-    color: var(--muted);
-    font-size: 13.5px;
-    margin: 0 0 18px;
-  }
-  .cat-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
-    gap: 14px 8px;
-  }
-  .cat-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    text-decoration: none;
-    color: var(--text);
-    text-align: center;
-  }
-  .cat-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    transition: transform .15s ease;
-  }
-  .cat-item:hover .cat-icon { transform: translateY(-3px) scale(1.05); }
-  .cat-label {
-    font-size: 11.5px;
-    line-height: 1.25;
-    color: var(--muted);
-  }
-  .cat-item:hover .cat-label { color: var(--text); }
-
-  .card-loja {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.2;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .card-meta {
-    font-size: 12px;
-    color: var(--muted);
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-  .categoria-pill {
-    background: var(--surface-2);
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-size: 11px;
-  }
-
-  .clique-stat {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 2px;
-  }
-  .clique-stat strong { color: var(--yellow); font-weight: 700; }
-
-  .cheia-aviso {
-    display: none;
-    background: rgba(255, 200, 69, 0.1);
-    border: 1px solid rgba(255, 200, 69, 0.35);
-    border-radius: 10px;
-    padding: 10px 12px;
-    font-size: 12px;
-    color: var(--text);
-    line-height: 1.4;
-  }
-  .cheia-aviso.show { display: block; }
-  .cheia-aviso strong { color: var(--yellow); }
-  .cheia-aviso button {
-    margin-top: 8px;
-    width: 100%;
-    background: var(--yellow);
-    color: #1A1416;
-    border: none;
-    border-radius: 7px;
-    padding: 8px 10px;
-    font-weight: 700;
-    font-size: 12.5px;
-    cursor: pointer;
-    font-family: inherit;
-  }
-  .cheia-aviso button:hover { background: #FFD666; }
-
-  .card-actions { display: flex; gap: 8px; margin-top: auto; }
-
-  .btn-join {
-    flex: 1;
-    background: var(--yellow);
-    color: #1A1416;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 12px;
-    font-weight: 700;
-    font-size: 13px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    display: block;
-    transition: background .15s ease;
-  }
-  .btn-join:hover { background: #FFD666; }
-
-  .btn-remove {
-    background: transparent;
-    border: 1px solid var(--line);
-    color: var(--muted);
-    border-radius: 8px;
-    padding: 10px 12px;
-    cursor: pointer;
-    font-size: 12px;
-    font-family: inherit;
-  }
-  .btn-remove:hover { border-color: #FF8A70; color: #FF8A70; }
-
-  .remove-panel {
-    display: none;
-    flex-direction: column;
-    gap: 8px;
-    background: var(--surface-2);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 12px;
-    margin-top: 2px;
-  }
-  .remove-panel.open { display: flex; }
-  .remove-panel input {
-    background: var(--bg);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    padding: 8px 10px;
-    color: var(--text);
-    font-size: 13px;
-    font-family: inherit;
-    outline: none;
-  }
-  .remove-panel input:focus { border-color: var(--coral); }
-  .remove-panel-actions { display: flex; gap: 8px; }
-  .remove-panel-actions button {
-    flex: 1;
-    border-radius: 6px;
-    padding: 8px 10px;
-    font-size: 12px;
-    font-family: inherit;
-    cursor: pointer;
-    border: none;
-  }
-  .remove-confirm { background: #FF5A36; color: #1A1416; font-weight: 700; }
-  .remove-cancel { background: transparent; border: 1px solid var(--line) !important; color: var(--muted); }
-  .remove-error { font-size: 11.5px; color: #FF8A70; display: none; }
-
-  .empty-state {
-    border: 1px dashed var(--line);
-    border-radius: var(--radius);
-    padding: 40px 20px;
-    text-align: center;
-    color: var(--muted);
-    font-size: 14px;
-  }
-  .empty-state strong { color: var(--text); display: block; margin-bottom: 6px; font-family: 'Space Grotesk', sans-serif; font-size: 16px; }
-
-  .footnote {
-    margin-top: 30px;
-    font-size: 12px;
-    color: #5C5766;
-    text-align: center;
-  }
-
-  @media (max-width: 600px) {
-    .vitrine-root { padding: 24px 14px 40px; border-radius: 14px; }
-    h1.vitrine-title { font-size: 28px; }
-    .vitrine-sub { font-size: 14px; margin-bottom: 24px; }
-    .form-card { padding: 16px; margin-bottom: 28px; }
-    .form-row { gap: 10px; }
-    .field { flex: 1 1 100%; }
-    .form-actions { flex-wrap: wrap; }
-    .btn-primary { width: 100%; }
-    .grid { gap: 10px; }
-    .card { padding: 14px; }
-    .card-loja { font-size: 15px; }
-    .avatar { width: 40px; height: 40px; }
-    .badge-live { padding: 3px 7px; font-size: 9px; }
-    .card-actions { flex-wrap: nowrap; }
-    .btn-join { font-size: 12.5px; padding: 10px 8px; }
-    .btn-remove { padding: 10px; }
-    .cat-section h2 { font-size: 16px; }
-    .cat-grid { grid-template-columns: repeat(auto-fill, minmax(68px, 1fr)); gap: 12px 6px; }
-    .cat-icon { width: 46px; height: 46px; font-size: 20px; }
-    .cat-label { font-size: 10.5px; }
-    .bg-icons { display: none; }
-  }
-
-  @media (max-width: 360px) {
-    h1.vitrine-title { font-size: 24px; }
-    .card-top { flex-direction: column; align-items: flex-start; gap: 8px; }
-    .badge-live { align-self: flex-start; }
-  }
-</style>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    .empty-state { border: 1px dashed var(--line); border-radius: var(--radius-md); padding: 32px 16px; text-align: center; color: var(--muted); font-size: 13.5px; }
+    .empty-state strong { color: var(--text); display: block; margin-bottom: 4px; font-family: 'Space Grotesk', sans-serif; font-size: 15px; }
+    .footnote { margin-top: 24px; font-size: 11px; color: #5C5766; text-align: center; line-height: 1.4; }
+  </style>
+</head>
+<body>
 
 <div class="vitrine-root">
-  <div class="bg-icons" aria-hidden="true">
-    <svg width="70" height="70" viewBox="0 0 24 24" fill="none" style="top:6%; left:4%; transform:rotate(-12deg); color:var(--coral);"><path d="M6 8h12l-1 12H7L6 8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 8V6a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-    <svg width="46" height="46" viewBox="0 0 24 24" fill="none" style="top:14%; left:88%; transform:rotate(15deg); color:var(--tiktok-pink);"><path d="M9 18V5l9 2v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="18" r="2.4" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="16" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg>
-    <svg width="54" height="54" viewBox="0 0 24 24" fill="none" style="top:38%; left:92%; transform:rotate(-8deg); color:var(--coral);"><path d="M6 8h12l-1 12H7L6 8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 8V6a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" style="top:55%; left:2%; transform:rotate(10deg); color:var(--tiktok-cyan);"><path d="M9 18V5l9 2v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="18" r="2.4" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="16" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg>
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" style="top:72%; left:80%; transform:rotate(-20deg); color:var(--yellow);"><path d="M6 8h12l-1 12H7L6 8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 8V6a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-    <svg width="50" height="50" viewBox="0 0 24 24" fill="none" style="top:85%; left:20%; transform:rotate(6deg); color:var(--tiktok-pink);"><path d="M9 18V5l9 2v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="18" r="2.4" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="16" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg>
-    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" style="top:26%; left:48%; transform:rotate(18deg); color:var(--coral);"><path d="M6 8h12l-1 12H7L6 8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 8V6a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-    <svg width="42" height="42" viewBox="0 0 24 24" fill="none" style="top:64%; left:44%; transform:rotate(-14deg); color:var(--tiktok-cyan);"><path d="M9 18V5l9 2v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7" cy="18" r="2.4" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="16" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg>
-  </div>
-  <div class="vitrine-inner">
-
+  <div class="hero-header">
     <div class="eyebrow"><span class="dot"></span>vitrine ao vivo</div>
-    <h1 class="vitrine-title">Cole o link da sua <span>live da Shopee</span> ou do <span>TikTok</span><br/>e deixe todo mundo entrar.</h1>
-    <p class="vitrine-sub">Um mural simples: você anuncia sua live — de venda na Shopee ou ao vivo no TikTok — outras pessoas clicam e entram na hora. Sem cadastro, sem complicação. Cada live fica visível por 1 hora.</p>
-
-    <div class="cat-section">
-      <h2>Adicione produtos da sua categoria favorita para publicar na sua live</h2>
-      <p class="cat-sub">Clique numa categoria pra ir direto pra ela na Shopee e escolher o que vai vender.</p>
-      <div class="cat-grid" id="cat-grid"></div>
-    </div>
-
-    <div class="form-card">
-      <div class="form-row">
-        <div class="field">
-          <label for="f-loja">Nome da loja / vendedor</label>
-          <input id="f-loja" type="text" placeholder="Ex: Bela Store Oficial" maxlength="60"/>
-        </div>
-        <div class="field">
-          <label for="f-plataforma">Plataforma</label>
-          <select id="f-plataforma">
-            <option value="shopee" selected>Live Shopee</option>
-            <option value="tiktok">Live TikTok</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="f-cat">Categoria</label>
-          <select id="f-cat">
-            <option value="Moda">Moda</option>
-            <option value="Beleza">Beleza</option>
-            <option value="Casa">Casa</option>
-            <option value="Eletrônicos">Eletrônicos</option>
-            <option value="Outros" selected>Outros</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-row" style="margin-top:12px;">
-        <div class="field" style="flex: 1 1 100%;">
-          <label for="f-link" id="f-link-label">Link da live (Shopee)</label>
-          <input id="f-link" type="text" placeholder="https://shopee.com.br/live/... ou https://shp.ee/..." />
-        </div>
-      </div>
-      <div class="form-row" style="margin-top:12px;">
-        <div class="field">
-          <label for="f-foto">Foto de capa (opcional)</label>
-          <input id="f-foto" type="text" placeholder="URL de imagem (evite links do susercontent.com)" />
-        </div>
-        <div class="field">
-          <label for="f-senha">Senha para remover depois</label>
-          <input id="f-senha" type="password" placeholder="Crie uma senha" maxlength="40"/>
-        </div>
-      </div>
-      <div class="form-actions">
-        <button class="btn-primary" id="f-submit">Publicar minha live</button>
-        <span class="form-msg" id="f-msg"></span>
-      </div>
-    </div>
-
-    <div class="list-header">
-      <h2>Lives no ar agora</h2>
-      <span class="list-count" id="live-count">carregando…</span>
-    </div>
-
-    <div id="live-grid" class="grid"></div>
-    <div id="empty-state" class="empty-state" style="display:none;">
-      <strong>Nenhuma live publicada ainda</strong>
-      Seja a primeira pessoa a colar o link da sua live ahí em cima.
-    </div>
-
-    <div class="footnote">As lives ficam visíveis para todo mundo que abrir esta página. Encerrou a sua? Clique em "remover" e digite a senha que você criou. Lives somem automaticamente depois de 1 hora.</div>
+    <a href="https://s.shopee.com.br/1qaJ5Bg2It" target="_blank" rel="noopener noreferrer" class="btn-atalho">🛍️ Atalho Shopee</a>
   </div>
+
+  <div class="form-card">
+    <div class="form-row">
+      <div class="field">
+        <label for="f-loja">Nome da loja / vendedor</label>
+        <input id="f-loja" type="text" placeholder="Ex: Bela Store Oficial" maxlength="60"/>
+      </div>
+      <div class="field">
+        <label for="f-plataforma">Plataforma</label>
+        <select id="f-plataforma">
+          <option value="shopee" selected>Live Shopee</option>
+          <option value="tiktok">Live TikTok</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-cat">Categoria</label>
+        <select id="f-cat">
+          <option value="Moda">Moda</option>
+          <option value="Beleza">Beleza</option>
+          <option value="Casa">Casa</option>
+          <option value="Eletrônicos">Eletrônicos</option>
+          <option value="Outros" selected>Outros</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-link" id="f-link-label">Link da live (Shopee)</label>
+        <input id="f-link" type="text" placeholder="https://shopee.com.br/live/... ou https://shp.ee/..." />
+      </div>
+      <div class="field">
+        <label for="f-foto">Foto de capa (opcional)</label>
+        <input id="f-foto" type="text" placeholder="URL de imagem" />
+      </div>
+      <div class="field">
+        <label for="f-senha">Senha para remover depois</label>
+        <input id="f-senha" type="password" placeholder="Crie uma senha" maxlength="40"/>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-primary" id="f-submit">Publicar minha live</button>
+      <span class="form-msg" id="f-msg"></span>
+    </div>
+  </div>
+
+  <div class="list-header">
+    <div class="tabs-live">
+      <button class="tab-btn active" data-plataforma="todas">🌐 Todas <span class="tab-count" id="tab-count-todas">0</span></button>
+      <button class="tab-btn" data-plataforma="shopee">🛍️ Shopee <span class="tab-count" id="tab-count-shopee">0</span></button>
+      <button class="tab-btn" data-plataforma="tiktok">🎵 TikTok <span class="tab-count" id="tab-count-tiktok">0</span></button>
+    </div>
+    <span class="list-count" id="live-count">carregando…</span>
+  </div>
+
+  <div id="live-grid" class="grid"></div>
+  <div id="empty-state" class="empty-state" style="display:none;">
+    <strong>Nenhuma live publicada</strong>
+    <span class="empty-corpo">Seja a primeira pessoa a colar o link da sua live aí em cima.</span>
+  </div>
+
+  <div class="footnote">As lives somem automaticamente depois de 1 hora.</div>
 </div>
 
 <script>
 (function(){
-  const STORAGE_KEY = 'lives-list';
-  const EXPIRA_MS = 1 * 60 * 60 * 1000; // 1 hora certinha
-  const LIMITE_ENTRADAS = 10;
+  const LIVE_PREFIX = 'live:';
+  const EXPIRA_MS = 1 * 60 * 60 * 1000;
+  const LIMITE_ENTRADAS = 10; 
 
   const loja = document.getElementById('f-loja');
   const cat = document.getElementById('f-cat');
@@ -565,165 +334,75 @@
     return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
   }
 
-  const AVATAR_CORES = ['#FF5A36', '#FFC845', '#4EA8DE', '#8AC926', '#C77DFF', '#FF7F9C'];
-
   function corDoAvatar(nome){
-    let hash = 0;
-    for (let i = 0; i < nome.length; i++){
-      hash = nome.charCodeAt(i) + ((hash << 5) - hash);
+    let hash = 0; for (let i = 0; i < nome.length; i++) hash = nome.charCodeAt(i) + ((hash << 5) - hash);
+    const cores = ['#FF5A36', '#FFC845', '#4EA8DE', '#8AC926', '#C77DFF', '#FF7F9C'];
+    return cores[Math.abs(hash) % cores.length];
+  }
+
+  function linkValidoParaPlataforma(urlText, plat){
+    const texto = urlText.trim().toLowerCase();
+    if (plat === 'shopee') {
+      return /^https?:\/\/(www\.)?shopee\.com\.br\/live\/.+/i.test(texto) || /^https?:\/\/([a-z0-9-]+\.)?shp\.ee\/.+/i.test(texto);
+    } else if (plat === 'tiktok') {
+      return /^https?:\/\/(www\.)?tiktok\.com\/@[a-zA-Z0-9_.]+\/live/i.test(texto) || /^https?:\/\/vt\.tiktok\.com\/.+/i.test(texto) || /^https?:\/\/vm\.tiktok\.com\/.+/i.test(texto);
     }
-    const idx = Math.abs(hash) % AVATAR_CORES.length;
-    return AVATAR_CORES[idx];
+    return false;
   }
 
-  function inicial(nome){
-    const limpo = nome.trim();
-    return limpo ? limpo.charAt(0).toUpperCase() : '?';
-  }
-
-  const CATEGORIAS = [
-    { nome: 'Eletrodomésticos', emoji: '🔌', cor: '#FF5A36', href: 'https://s.shopee.com.br/8AUBEWYUD5' },
-    { nome: 'Automóveis', emoji: '🚗', cor: '#4EA8DE', href: 'https://s.shopee.com.br/6Aj6qwdskV' },
-    { nome: 'Saúde', emoji: '💊', cor: '#FF7F9C', href: 'https://s.shopee.com.br/2qSessaaYW' },
-    { nome: 'Áudio', emoji: '🎧', cor: '#FFC845', href: 'https://s.shopee.com.br/20tXtTW87b' },
-    { nome: 'Bolsas Femininas', emoji: '👜', cor: '#C77DFF', href: 'https://s.shopee.com.br/6ffNS7Zuo0' },
-    { nome: 'Animais Domésticos', emoji: '🐾', cor: '#8AC926', href: 'https://s.shopee.com.br/LlJuY0bWi' },
-    { nome: 'Computadores e Acessórios', emoji: '💻', cor: '#4EA8DE', href: 'https://s.shopee.com.br/5AqZfVBNyh' },
-    { nome: 'Jogos e Consoles', emoji: '🎮', cor: '#FE2C55', href: 'https://s.shopee.com.br/5AqZfYeyIv' },
-    { nome: 'Viagens e Bagagens', emoji: '🧳', cor: '#25F4EE', href: 'https://s.shopee.com.br/LlJukyn04' },
-    { nome: 'Shopee Doações', emoji: '❤️', cor: '#FF5A36', href: 'https://s.shopee.com.br/9pcPEK0lCM' },
-    { nome: 'Brinquedos e Hobbies', emoji: '🧸', cor: '#FFC845', href: 'https://s.shopee.com.br/50X9TTit7Y' },
-    { nome: 'Acessórios para Veículos', emoji: '🔧', cor: '#8AC926', href: 'https://s.shopee.com.br/6L2X3y7fIi' },
-    { nome: 'Motocicletas', emoji: '🏍️', cor: '#4EA8DE', href: 'https://s.shopee.com.br/80Al34lwjB' },
-    { nome: 'Mãe e Bebê', emoji: '🍼', cor: '#FF7F9C', href: 'https://s.shopee.com.br/5VTQ4W4PyZ' },
-    { nome: 'Bolsas Masculinas', emoji: '🎒', cor: '#C77DFF', href: 'https://s.shopee.com.br/8pjs2msd7X' },
-    { nome: 'Papelaria', emoji: '✏️', cor: '#FFC845', href: 'https://s.shopee.com.br/3qLC5e5unD' },
-    { nome: 'Alimentos e Bebidas', emoji: '🍎', cor: '#8AC926', href: 'https://s.shopee.com.br/3g1ltNnjsC' },
-    { nome: 'Câmeras e Drones', emoji: '📷', cor: '#FE2C55', href: 'https://s.shopee.com.br/6pynfFf4tU' },
-    { nome: 'Livros e Revistas', emoji: '📚', cor: '#4EA8DE', href: 'https://s.shopee.com.br/gOAK0vf6c' }
-  ];
-
-  function renderCategorias(){
-    const catGrid = document.getElementById('cat-grid');
-    if (!catGrid) return;
-    catGrid.innerHTML = '';
-    CATEGORIAS.forEach(c => {
-      const a = document.createElement('a');
-      a.className = 'cat-item';
-      a.href = c.href;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-      a.innerHTML = `
-        <div class="cat-icon" style="background:${c.cor}22; border:1px solid ${c.cor}55;">${c.emoji}</div>
-        <span class="cat-label">${c.nome}</span>
-      `;
-      catGrid.appendChild(a);
-    });
-  }
-  renderCategorias();
-
-  function isShopeeLink(v){
-    try {
-      const u = new URL(v);
-      if (u.protocol !== 'http:' && u.protocol !== 'https:') return false;
-      const host = u.hostname.toLowerCase();
-      return host.includes('shopee') || host.endsWith('shp.ee');
-    } catch(e){ return false; }
-  }
-
-  function isTiktokLink(v){
-    try {
-      const u = new URL(v);
-      if (u.protocol !== 'http:' && u.protocol !== 'https:') return false;
-      const host = u.hostname.toLowerCase();
-      return host.includes('tiktok.com');
-    } catch(e){ return false; }
-  }
-
-  function linkValidoParaPlataforma(v, plat){
-    return plat === 'tiktok' ? isTiktokLink(v) : isShopeeLink(v);
-  }
-
-  function atualizarCamposPorPlataforma(){
-    if (plataforma.value === 'tiktok'){
-      linkLabel.textContent = 'Link da live (TikTok)';
-      link.placeholder = 'https://www.tiktok.com/@usuario/live ou https://vt.tiktok.com/...';
+  plataforma.addEventListener('change', () => {
+    if (plataforma.value === 'tiktok') {
+      linkLabel.textContent = 'Link da live (TikTok)'; link.placeholder = 'https://www.tiktok.com/@usuario/live ou vt.tiktok.com/...';
     } else {
-      linkLabel.textContent = 'Link da live (Shopee)';
-      link.placeholder = 'https://shopee.com.br/live/... ou https://shp.ee/...';
+      linkLabel.textContent = 'Link da live (Shopee)'; link.placeholder = 'https://shopee.com.br/live/... ou https://shp.ee/...';
     }
-  }
-  plataforma.addEventListener('change', atualizarCamposPorPlataforma);
-  atualizarCamposPorPlataforma();
+  });
 
-  function timeAgo(ts){
-    const diffMs = Date.now() - ts;
-    const min = Math.floor(diffMs / 60000);
-    if (min < 1) return 'agora mesmo';
-    if (min < 60) return 'há ' + min + ' min';
-    const h = Math.floor(min / 60);
-    if (h < 24) return 'há ' + h + 'h';
-    const d = Math.floor(h / 24);
-    return 'há ' + d + 'd';
-  }
+  const mockStorage = {
+    list: async () => ({ keys: Object.keys(localStorage).filter(k => k.startsWith(LIVE_PREFIX)) }),
+    get: async (key) => ({ value: localStorage.getItem(key) }),
+    set: async (key, val) => { localStorage.setItem(key, val); },
+    delete: async (key) => { localStorage.removeItem(key); }
+  };
+  const storageContext = window.storage || mockStorage;
 
-  // Mudado para localStorage nativo para garantir suporte 100% web e mobile
   async function loadLives(){
     try {
-      const data = localStorage.getItem(STORAGE_KEY);
-      return data ? JSON.parse(data) : [];
-    } catch(e){
-      return [];
-    }
+      const listagem = await storageContext.list(LIVE_PREFIX, true);
+      if (!listagem || !listagem.keys) return [];
+      const resultados = await Promise.all(listagem.keys.map(async (k) => {
+        const r = await storageContext.get(k, true); return r && r.value ? JSON.parse(r.value) : null;
+      }));
+      return resultados.filter(Boolean);
+    } catch(e){ return []; }
   }
 
-  async function saveLives(lives){
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(lives));
-    } catch(e){
-      console.error('Erro ao salvar no localStorage', e);
-    }
-  }
+  async function salvarLive(live){ try{ await storageContext.set(LIVE_PREFIX+live.id, JSON.stringify(live), true); }catch(e){} }
+  async function removerLive(id){ try{ await storageContext.delete(LIVE_PREFIX+id, true); }catch(e){} }
 
-  function removerExpiradas(lives){
+  async function removerExpiradas(lives){
     const agora = Date.now();
+    const expiradas = lives.filter(l => (agora - l.criadoEm) >= EXPIRA_MS);
+    if (expiradas.length > 0) await Promise.all(expiradas.map(l => removerLive(l.id)));
     return lives.filter(l => (agora - l.criadoEm) < EXPIRA_MS);
   }
 
-  function fallbackAvatar(nome){
-    const div = document.createElement('div');
-    div.className = 'avatar avatar-fallback';
-    div.style.background = corDoAvatar(nome || '?');
-    div.textContent = inicial(nome);
-    return div;
-  }
-
   const jaContadoNestaSessao = new Set();
-
   async function incrementarClique(id){
     try {
-      const lives = await loadLives();
-      const alvo = lives.find(l => l.id === id);
-      if (alvo){
-        alvo.cliques = (alvo.cliques || 0) + 1;
-        await saveLives(lives);
-      }
-    } catch(e){
-      console.error('Erro ao contar clique', e);
-    }
+      const r = await storageContext.get(LIVE_PREFIX + id, true); if (!r || !r.value) return 0;
+      const alvo = JSON.parse(r.value); alvo.cliques = (alvo.cliques || 0) + 1;
+      await storageContext.set(LIVE_PREFIX + id, JSON.stringify(alvo), true);
+      return alvo.cliques;
+    } catch(e){ return 0; }
   }
 
   function render(lives){
     lives = lives.slice().sort((a,b) => b.criadoEm - a.criadoEm);
     countEl.textContent = lives.length + (lives.length === 1 ? ' live' : ' lives');
     grid.innerHTML = '';
-    if (lives.length === 0){
-      empty.style.display = 'block';
-      grid.style.display = 'none';
-      return;
-    }
-    empty.style.display = 'none';
-    grid.style.display = 'grid';
+    if (lives.length === 0){ empty.style.display = 'block'; grid.style.display = 'none'; return; }
+    empty.style.display = 'none'; grid.style.display = 'flex';
 
     lives.forEach(item => {
       const card = document.createElement('div');
@@ -733,137 +412,120 @@
         <div class="card-top">
           <div class="card-head">
             <div class="avatar-wrap"></div>
-            <div>
+            <div style="min-width:0; flex:1;">
               <div class="card-loja"></div>
               <div class="card-meta">
-                <span class="plataforma-tag ${ehTiktok ? 'tag-tiktok' : 'tag-shopee'}">${ehTiktok ? 'Live TikTok' : 'Live Shopee'}</span>
+                <span class="plataforma-tag ${ehTiktok ? 'tag-tiktok' : 'tag-shopee'}">${ehTiktok ? 'TikTok' : 'Shopee'}</span>
                 <span class="categoria-pill"></span>
-                <span class="tempo"></span>
               </div>
-              <div class="clique-stat">👥 <strong class="clique-num"></strong> <span class="clique-label"></span></div>
+              <div class="clique-stat" style="margin-top:4px;">👥 <strong class="clique-num">0</strong> entraram</div>
             </div>
           </div>
-          <span class="badge-live ${ehTiktok ? 'badge-tiktok' : ''}"><span class="dot"></span>AO VIVO</span>
+          <span class="badge-live ${ehTiktok ? 'badge-tiktok' : ''}">AO VIVO</span>
         </div>
-        <div class="cheia-aviso">
-          🔥 Essa live bateu <strong>10 entradas</strong>. Tá bombando, mas se preferir algo com menos gente:
-          <button class="btn-sugestao"></button>
-        </div>
+        <div class="cheia-aviso">🔥 Live Lotada (Limite 10). Escolha outra: <button class="btn-sugestao"></button></div>
         <div class="card-actions">
           <a class="btn-join" target="_blank" rel="noopener noreferrer">Entrar na live</a>
-          <button class="btn-remove" title="Remover">✕</button>
+          <button class="btn-remove">✕</button>
         </div>
         <div class="remove-panel">
-          <input type="password" class="remove-input" placeholder="Digite a senha da live" />
-          <div class="remove-error">Senha incorreta. Tente de novo.</div>
-          <div class="remove-panel-actions">
-            <button class="remove-confirm">Remover live</button>
-            <button class="remove-cancel">Cancelar</button>
-          </div>
+          <input type="password" class="remove-input" placeholder="Senha da live" />
+          <div class="remove-error">Senha incorreta.</div>
+          <div class="remove-panel-actions"><button class="remove-confirm">Remover</button><button class="remove-cancel">Sair</button></div>
         </div>
       `;
       card.querySelector('.card-loja').textContent = item.loja;
       card.querySelector('.categoria-pill').textContent = item.categoria;
-      card.querySelector('.tempo').textContent = timeAgo(item.criadoEm);
       card.querySelector('.clique-num').textContent = item.cliques || 0;
-      const horasDesdePublicada = Math.max(1, Math.ceil((Date.now() - item.criadoEm) / 3600000));
-      card.querySelector('.clique-label').textContent =
-        'entraram nas últimas ' + horasDesdePublicada + 'h';
 
-      const avatarWrap = card.querySelector('.avatar-wrap');
-      if (item.foto){
-        const img = document.createElement('img');
-        img.className = 'avatar';
-        img.src = item.foto;
-        img.alt = item.loja;
-        img.referrerPolicy = 'no-referrer';
-        const trocarParaFallback = () => {
-          avatarWrap.innerHTML = '';
-          avatarWrap.appendChild(fallbackAvatar(item.loja));
-        };
-        img.onerror = trocarParaFallback;
-        img.onload = () => {
-          if (img.naturalWidth === 0 || img.naturalHeight === 0) trocarParaFallback();
-        };
-        avatarWrap.appendChild(img);
+      const avWrap = card.querySelector('.avatar-wrap');
+      if(item.foto){
+        const img = document.createElement('img'); img.className='avatar'; img.src=item.foto;
+        img.onerror = () => { avWrap.innerHTML = ''; const fb = document.createElement('div'); fb.className='avatar avatar-fallback'; fb.style.background=corDoAvatar(item.loja); fb.textContent=item.loja.charAt(0).toUpperCase(); avWrap.appendChild(fb); };
+        avWrap.appendChild(img);
       } else {
-        avatarWrap.appendChild(fallbackAvatar(item.loja));
+        const fb = document.createElement('div'); fb.className='avatar avatar-fallback'; fb.style.background=corDoAvatar(item.loja); fb.textContent=item.loja.charAt(0).toUpperCase(); avWrap.appendChild(fb);
       }
-      const joinBtn = card.querySelector('.btn-join');
-      joinBtn.href = item.link;
-      joinBtn.addEventListener('click', () => {
-        if (jaContadoNestaSessao.has(item.id)) return; 
-        jaContadoNestaSessao.add(item.id);
-        incrementarClique(item.id);
-        const numEl = card.querySelector('.clique-num');
-        numEl.textContent = (item.cliques || 0) + 1;
-      });
 
-      const aviso = card.querySelector('.cheia-aviso');
-      if ((item.cliques || 0) >= LIMITE_ENTRADAS){
-        const filaPorEntrada = lives.slice().sort((a, b) => a.criadoEm - b.criadoEm);
-        const posicao = filaPorEntrada.findIndex(l => l.id === item.id);
-        let proxima = filaPorEntrada[posicao + 1];
-        if (!proxima && filaPorEntrada.length > 1){
-          proxima = filaPorEntrada.find(l => l.id !== item.id);
-        }
+      const joinBtn = card.querySelector('.btn-join');
+      let cliquesAtuais = item.cliques || 0;
+
+      if (cliquesAtuais >= LIMITE_ENTRADAS) {
+        joinBtn.textContent = 'Fila Cheia (Lotado)'; joinBtn.classList.add('disabled'); joinBtn.removeAttribute('href');
+      } else {
+        joinBtn.href = item.link;
+        joinBtn.addEventListener('click', async (e) => {
+          if (jaContadoNestaSessao.has(item.id)) return;
+          jaContadoNestaSessao.add(item.id);
+          const novosCliques = await incrementarClique(item.id);
+          card.querySelector('.clique-num').textContent = novosCliques;
+          if (novosCliques >= LIMITE_ENTRADAS) {
+            joinBtn.textContent = 'Fila Cheia (Lotado)'; joinBtn.classList.add('disabled'); joinBtn.removeAttribute('href');
+            await carregarERenderizar();
+          }
+        });
+      }
+
+      if (cliquesAtuais >= LIMITE_ENTRADAS){
+        let proxima = lives.find(l => l.id !== item.id && (l.cliques || 0) < LIMITE_ENTRADAS);
+        const aviso = card.querySelector('.cheia-aviso');
         if (proxima){
-          aviso.classList.add('show');
-          const botaoSugestao = card.querySelector('.btn-sugestao');
-          botaoSugestao.textContent = 'Ver ' + proxima.loja + ' (' + (proxima.cliques || 0) + ' entraram)';
-          botaoSugestao.addEventListener('click', () => {
-            if (!jaContadoNestaSessao.has(proxima.id)){
-              jaContadoNestaSessao.add(proxima.id);
-              incrementarClique(proxima.id);
-            }
-            window.open(proxima.link, '_blank', 'noopener,noreferrer');
-          });
+          aviso.classList.add('show'); const bS = card.querySelector('.btn-sugestao');
+          bS.textContent = 'Ir para ' + proxima.loja;
+          bS.addEventListener('click', () => { window.open(proxima.link, '_blank'); });
+        } else {
+          aviso.classList.add('show'); aviso.innerHTML = `🔥 Todas as lives estão cheias!`;
         }
       }
 
       const panel = card.querySelector('.remove-panel');
-      const removeInput = card.querySelector('.remove-input');
-      const removeError = card.querySelector('.remove-error');
-
-      card.querySelector('.btn-remove').addEventListener('click', () => {
-        panel.classList.toggle('open');
-        removeError.style.display = 'none';
-        removeInput.value = '';
-        if (panel.classList.contains('open')) removeInput.focus();
-      });
-
-      card.querySelector('.remove-cancel').addEventListener('click', () => {
-        panel.classList.remove('open');
-      });
-
+      const rInput = card.querySelector('.remove-input');
+      card.querySelector('.btn-remove').addEventListener('click', () => { panel.classList.toggle('open'); card.querySelector('.remove-error').style.display='none'; });
+      card.querySelector('.remove-cancel').addEventListener('click', () => panel.classList.remove('open'));
       card.querySelector('.remove-confirm').addEventListener('click', async () => {
-        const tentativa = await hashSenha(removeInput.value);
-        if (tentativa !== item.senhaHash){
-          removeError.style.display = 'block';
-          removeInput.focus();
-          return;
-        }
-        const current = removerExpiradas(await loadLives());
-        const updated = current.filter(l => l.id !== item.id);
-        await saveLives(updated);
-        render(updated);
-      });
-
-      removeInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') card.querySelector('.remove-confirm').click();
+        if (await hashSenha(rInput.value) !== item.senhaHash) { card.querySelector('.remove-error').style.display='block'; return; }
+        await removerLive(item.id); await carregarERenderizar();
       });
 
       grid.appendChild(card);
     });
   }
 
-  async function init(){
-    const lives = await loadLives();
-    const ativas = removerExpiradas(lives);
-    if (ativas.length !== lives.length){
-      await saveLives(ativas); 
-    }
-    render(ativas);
+  let todasLivesAtivas = []; let abaAtual = 'todas';
+  function renderAbaAtual(){
+    const filtradas = abaAtual === 'todas' ? todasLivesAtivas : todasLivesAtivas.filter(l => (l.plataforma || 'shopee') === abaAtual);
+    render(filtradas);
+    document.getElementById('tab-count-todas').textContent = todasLivesAtivas.length;
+    document.getElementById('tab-count-shopee').textContent = todasLivesAtivas.filter(l => (l.plataforma || 'shopee') === 'shopee').length;
+    document.getElementById('tab-count-tiktok').textContent = todasLivesAtivas.filter(l => l.plataforma === 'tiktok').length;
   }
 
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      abaAtual = btn.dataset.plataforma; document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active'); renderAbaAtual();
+    });
+  });
+
+  async function carregarERenderizar(){ todasLivesAtivas = await removerExpiradas(await loadLives()); renderAbaAtual(); }
+
   submit.addEventListener('click', async () => {
+    msg.textContent = ''; msg.classList.remove('error');
+    if (!loja.value.trim()){ msg.textContent = 'Nome da loja obrigatório.'; msg.classList.add('error'); return; }
+    if (!linkValidoParaPlataforma(link.value, plataforma.value)){ msg.textContent = 'Link inválido para a plataforma.'; msg.classList.add('error'); return; }
+    if (senha.value.length < 4){ msg.textContent = 'Senha mínima de 4 dígitos.'; msg.classList.add('error'); return; }
+
+    submit.disabled = true; const sHash = await hashSenha(senha.value);
+    const newLive = { id: 'live_'+Date.now(), loja: loja.value.trim(), link: link.value.trim(), categoria: cat.value, plataforma: plataforma.value, criadoEm: Date.now(), senhaHash: sHash, foto: foto.value.trim(), cliques: 0 };
+    
+    await salvarLive(newLive); abaAtual = 'todas';
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.plataforma === 'todas'));
+    await carregarERenderizar();
+    loja.value = ''; link.value = ''; foto.value = ''; senha.value = ''; submit.disabled = false;
+  });
+
+  carregarERenderizar();
+})();
+</script>
+</body>
+</html>
