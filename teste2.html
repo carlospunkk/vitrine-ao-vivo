@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Vitrine ao Vivo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0D0C0F;
+      --surface: #1A181F;
+      --surface-2: #25222B;
+      --coral: #FF5A36;
+      --yellow: #FFC845;
+      --text: #F5F1EA;
+      --muted: #948FA0;
+      --line: #2F2A37;
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --tiktok-pink: #FE2C55;
+      --tiktok-cyan: #25F4EE;
+    }
+
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    html, body { 
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      overflow-x: hidden;
+      max-width: 100%;
+      min-height: 100vh;
+    }
+
+    .vitrine-root {
+      max-width: 500px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--bg);
+      padding: 80px 16px 40px;
+      position: relative;
+    }
+
+    .hero-header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--coral);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--coral);
+      box-shadow: 0 0 0 0 rgba(255,90,54,0.6);
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255,90,54,0.55); }
+      70% { box-shadow: 0 0 0 8px rgba(255,90,54,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,90,54,0); }
+    }
+
+    .btn-atalho {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(255, 90, 54, 0.12);
+      color: var(--coral);
+      border: 1px solid rgba(255, 90, 54, 0.35);
+      border-radius: var(--radius-sm);
+      padding: 10px 16px;
+      font-weight: 700;
+      font-size: 13.5px;
+      text-decoration: none;
+      transition: background .15s ease, transform .12s ease;
+    }
+    .btn-atalho:hover {
+      background: rgba(255, 90, 54, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      margin-bottom: 28px;
+    }
+    .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .field { flex: 1 1 100%; display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    .field:last-child { margin-bottom: 0; }
+    .field label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .field input, .field select {
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      color: var(--text);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color .15s ease;
+      width: 100%;
+    }
+    .field input:focus, .field select:focus { border-color: var(--coral); }
+    .field input::placeholder { color: #5C5766; }
+
+    .form-actions { margin-top: 16px; display: flex; align-items: center; gap: 12px; }
+
+    .btn-primary {
+      background: var(--coral);
+      color: #1A1416;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: inherit;
+      width: 100%;
+      transition: background .15s ease;
+    }
+    .btn-primary:hover { background: #FF6E4E; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .form-msg { font-size: 13px; color: var(--muted); }
+    .form-msg.error { color: #FF8A70; }
+
+    .list-header {
+      display: flex; flex-direction: column; gap: 12px;
+      margin-bottom: 16px;
+    }
+    .tabs-live { display: flex; gap: 6px; width: 100%; }
+    .tab-btn {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      padding: 10px 4px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 11.5px;
+      cursor: pointer;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all .15s ease;
+    }
+    .tab-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      background: var(--surface-2);
+      border-radius: 999px;
+      padding: 1px 6px;
+    }
+    .tab-btn[data-plataforma="todas"].active { color: var(--text); border-color: rgba(245,241,234,0.4); background: rgba(245,241,234,0.08); }
+    .tab-btn[data-plataforma="shopee"].active { color: var(--coral); border-color: rgba(255,90,54,0.4); background: rgba(255,90,54,0.08); }
+    .tab-btn[data-plataforma="tiktok"].active { color: var(--tiktok-pink); border-color: rgba(254,44,85,0.4); background: rgba(254,44,85,0.08); }
+    
+    .list-count { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted); align-self: flex-end; }
+
+    .grid { display: flex; flex-direction: column; gap: 12px; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--coral);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .card.card-tiktok { border-left: 4px solid var(--tiktok-pink); }
+
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+    .card-head { display: flex; align-items: center; gap: 10px; min-width: 0; }
+
+    .avatar { width: 42px; height: 42px; border-radius: 8px; object-fit: cover; background: var(--surface-2); border: 1px solid var(--line); }
+    .avatar-fallback { display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; color: #1A1416; }
+
+    .card-loja { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-meta { font-size: 11.5px; color: var(--muted); display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 2px; }
+    .plataforma-tag { font-family: 'JetBrains Mono', monospace; font-size: 9px; padding: 1px 5px; border-radius: 4px; font-weight: 600; }
+    .plataforma-tag.tag-shopee { background: rgba(255,90,54,0.12); color: var(--coral); }
+    .plataforma-tag.tag-tiktok { background: rgba(254,44,85,0.12); color: var(--tiktok-pink); }
+    .categoria-pill { background: var(--surface-2); padding: 1px 6px; border-radius: 4px; font-size: 10.5px; }
+
+    .badge-live { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--coral); background: rgba(255,90,54,0.1); border: 1px solid rgba(255,90,54,0.25); border-radius: 4px; padding: 2px 6px; display: flex; align-items: center; gap: 4px; }
+    .badge-live.badge-tiktok { color: var(--tiktok-pink); background: rgba(254,44,85,0.1); border: 1px solid rgba(254,44,85,0.25); }
+
+    .clique-stat { font-size: 12px; color: var(--muted); }
+    .clique-stat strong { color: var(--yellow); }
+
+    .cheia-aviso { display: none; background: rgba(255, 200, 69, 0.08); border: 1px solid rgba(255, 200, 69, 0.25); border-radius: 8px; padding: 10px; font-size: 12px; line-height: 1.4; }
+    .cheia-aviso.show { display: block; }
+    .cheia-aviso button { margin-top: 6px; width: 100%; background: var(--yellow); color: #1A1416; border: none; border-radius: 6px; padding: 8px; font-weight: 700; font-size: 12px; cursor: pointer; }
+
+    .card-actions { display: flex; gap: 8px; }
+    .btn-join { flex: 1; background: var(--yellow); color: #1A1416; border: none; border-radius: 8px; padding: 10px; font-weight: 700; font-size: 13px; text-align: center; text-decoration: none; display: block; }
+    .btn-join.disabled { background: var(--surface-2) !important; color: var(--muted) !important; cursor: not-allowed; border: 1px solid var(--line); pointer-events: none; }
+    .btn-remove { background: transparent; border: 1px solid var(--line); color: var(--muted); border-radius: 8px; padding: 10px 14px; cursor: pointer; }
+
+    .remove-panel { display: none; flex-direction: column; gap: 8px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px; padding: 10px; }
+    .remove-panel.open { display: flex; }
+    .remove-panel input { background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 8px; color: var(--text); font-size: 13px; outline: none; }
+    .remove-panel-actions { display: flex; gap: 6px; }
+    .remove-panel-actions button { flex: 1; border-radius: 6px; padding: 8px; font-size: 12px; cursor: pointer; border: none; }
+    .remove-confirm { background: #FF5A36; color: #1A1416; font-weight: 700; }
+    .remove-cancel { background: transparent; border: 1px solid var(--line) !important; color: var(--muted); }
+    .remove-error { font-size: 11.5px; color: #FF8A70; display: none; }
+
+    .empty-state { border: 1px dashed var(--line); border-radius: var(--radius-md); padding: 32px 16px; text-align: center; color: var(--muted); font-size: 13.5px; }
+    .empty-state strong { color: var(--text); display: block; margin-bottom: 4px; font-family: 'Space Grotesk', sans-serif; font-size: 15px; }
+    .footnote { margin-top: 24px; font-size: 11px; color: #5C5766; text-align: center; line-height: 1.4; }
+  </style>
+</head>
+<body>
+
+<div class="vitrine-root">
+  <div class="hero-header">
+    <div class="eyebrow"><span class="dot"></span>vitrine ao vivo</div>
+    <a href="https://s.shopee.com.br/1qaJ5Bg2It" target="_blank" rel="noopener noreferrer" class="btn-atalho">🛍️ Atalho Shopee</a>
+  </div>
+
+  <div class="form-card">
+    <div class="form-row">
+      <div class="field">
+        <label for="f-loja">Nome da loja / vendedor</label>
+        <input id="f-loja" type="text" placeholder="Ex: Bela Store Oficial" maxlength="60"/>
+      </div>
+      <div class="field">
+        <label for="f-plataforma">Plataforma</label>
+        <select id="f-plataforma">
+          <option value="shopee" selected>Live Shopee</option>
+          <option value="tiktok">Live TikTok</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-cat">Categoria</label>
+        <select id="f-cat">
+          <option value="Moda">Moda</option>
+          <option value="Beleza">Beleza</option>
+          <option value="Casa">Casa</option>
+          <option value="Eletrônicos">Eletrônicos</option>
+          <option value="Outros" selected>Outros</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-link" id="f-link-label">Link da live (Shopee)</label>
+        <input id="f-link" type="text" placeholder="https://shopee.com.br/live/... ou https://shp.ee/..." />
+      </div>
+      <div class="field">
+        <label for="f-foto">Foto de capa (opcional)</label>
+        <input id="f-foto" type="text" placeholder="URL de imagem" />
+      </div>
+      <div class="field">
+        <label for="f-senha">Senha para remover depois</label>
+        <input id="f-senha" type="password" placeholder="Crie uma senha" maxlength="40"/>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-primary" id="f-submit">Publicar minha live</button>
+      <span class="form-msg" id="f-msg"></span>
+    </div>
+  </div>
+
+  <div class="list-header">
+    <div class="tabs-live">
+      <button class="tab-btn active" data-plataforma="todas">🌐 Todas <span class="tab-count" id="tab-count-todas">0</span></button>
+      <button class="tab-btn" data-plataforma="shopee">🛍️ Shopee <span class="tab-count" id="tab-count-shopee">0</span></button>
+      <button class="tab-btn" data-plataforma="tiktok">🎵 TikTok <span class="tab-count" id="tab-count-tiktok">0</span></button>
+    </div>
+    <span class="list-count" id="live-count">carregando…</span>
+  </div>
+
+  <div id="live-grid" class="grid"></div>
+  <div id="empty-state" class="empty-state" style="display:none;">
+    <strong>Nenhuma live publicada</strong>
+    <span class="empty-corpo">Seja a primeira pessoa a colar o link da sua live aí em cima.</span>
+  </div>
+
+  <div class="footnote">As lives somem automaticamente depois de 1 hora.</div>
+</div>
+
+<script>
+(function(){
+  const LIVE_PREFIX = 'live:';
+  const EXPIRA_MS = 1 * 60 * 60 * 1000;
+  const LIMITE_ENTRADAS = 10; 
+
+  const loja = document.getElementById('f-loja');
+  const cat = document.getElementById('f-cat');
+  const plataforma = document.getElementById('f-plataforma');
+  const linkLabel = document.getElementById('f-link-label');
+  const link = document.getElementById('f-link');
+  const foto = document.getElementById('f-foto');
+  const senha = document.getElementById('f-senha');
+  const submit = document.getElementById('f-submit');
+  const msg = document.getElementById('f-msg');
+  const grid = document.getElementById('live-grid');
+  const empty = document.getElementById('empty-state');
+  const countEl = document.getElementById('live-count');
+
+  async function hashSenha(texto){
+    const enc = new TextEncoder().encode(texto);
+    const buf = await crypto.subtle.digest('SHA-256', enc);
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  function corDoAvatar(nome){
+    let hash = 0; for (let i = 0; i < nome.length; i++) hash = nome.charCodeAt(i) + ((hash << 5) - hash);
+    const cores = ['#FF5A36', '#FFC845', '#4EA8DE', '#8AC926', '#C77DFF', '#FF7F9C'];
+    return cores[Math.abs(hash) % cores.length];
+  }
+
+  function linkValidoParaPlataforma(urlText, plat){
+    const texto = urlText.trim().toLowerCase();
+    if (plat === 'shopee') {
+      return /^https?:\/\/(www\.)?shopee\.com\.br\/live\/.+/i.test(texto) || /^https?:\/\/([a-z0-9-]+\.)?shp\.ee\/.+/i.test(texto);
+    } else if (plat === 'tiktok') {
+      return /^https?:\/\/(www\.)?tiktok\.com\/@[a-zA-Z0-9_.]+\/live/i.test(texto) || /^https?:\/\/vt\.tiktok\.com\/.+/i.test(texto) || /^https?:\/\/vm\.tiktok\.com\/.+/i.test(texto);
+    }
+    return false;
+  }
+
+  plataforma.addEventListener('change', () => {
+    if (plataforma.value === 'tiktok') {
+      linkLabel.textContent = 'Link da live (TikTok)'; link.placeholder = 'https://www.tiktok.com/@usuario/live ou vt.tiktok.com/...';
+    } else {
+      linkLabel.textContent = 'Link da live (Shopee)'; link.placeholder = 'https://shopee.com.br/live/... ou https://shp.ee/...';
+    }
+  });
+
+  const mockStorage = {
+    list: async () => ({ keys: Object.keys(localStorage).filter(k => k.startsWith(LIVE_PREFIX)) }),
+    get: async (key) => ({ value: localStorage.getItem(key) }),
+    set: async (key, val) => { localStorage.setItem(key, val); },
+    delete: async (key) => { localStorage.removeItem(key); }
+  };
+  const storageContext = window.storage || mockStorage;
+
+  async function loadLives(){
+    try {
+      const listagem = await storageContext.list(LIVE_PREFIX, true);
+      if (!listagem || !listagem.keys) return [];
+      const resultados = await Promise.all(listagem.keys.map(async (k) => {
+        const r = await storageContext.get(k, true); return r && r.value ? JSON.parse(r.value) : null;
+      }));
+      return resultados.filter(Boolean);
+    } catch(e){ return []; }
+  }
+
+  async function salvarLive(live){ try{ await storageContext.set(LIVE_PREFIX+live.id, JSON.stringify(live), true); }catch(e){} }
+  async function removerLive(id){ try{ await storageContext.delete(LIVE_PREFIX+id, true); }catch(e){} }
+
+  async function removerExpiradas(lives){
+    const agora = Date.now();
+    const expiradas = lives.filter(l => (agora - l.criadoEm) >= EXPIRA_MS);
+    if (expiradas.length > 0) await Promise.all(expiradas.map(l => removerLive(l.id)));
+    return lives.filter(l => (agora - l.criadoEm) < EXPIRA_MS);
+  }
+
+  const jaContadoNestaSessao = new Set();
+  async function incrementarClique(id){
+    try {
+      const r = await storageContext.get(LIVE_PREFIX + id, true); if (!r || !r.value) return 0;
+      const alvo = JSON.parse(r.value); alvo.cliques = (alvo.cliques || 0) + 1;
+      await storageContext.set(LIVE_PREFIX + id, JSON.stringify(alvo), true);
+      return alvo.cliques;
+    } catch(e){ return 0; }
+  }
+
+  function render(lives){
+    lives = lives.slice().sort((a,b) => b.criadoEm - a.criadoEm);
+    countEl.textContent = lives.length + (lives.length === 1 ? ' live' : ' lives');
+    grid.innerHTML = '';
+    if (lives.length === 0){ empty.style.display = 'block'; grid.style.display = 'none'; return; }
+    empty.style.display = 'none'; grid.style.display = 'flex';
+
+    lives.forEach(item => {
+      const card = document.createElement('div');
+      const ehTiktok = item.plataforma === 'tiktok';
+      card.className = 'card' + (ehTiktok ? ' card-tiktok' : '');
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="card-head">
+            <div class="avatar-wrap"></div>
+            <div style="min-width:0; flex:1;">
+              <div class="card-loja"></div>
+              <div class="card-meta">
+                <span class="plataforma-tag ${ehTiktok ? 'tag-tiktok' : 'tag-shopee'}">${ehTiktok ? 'TikTok' : 'Shopee'}</span>
+                <span class="categoria-pill"></span>
+              </div>
+              <div class="clique-stat" style="margin-top:4px;">👥 <strong class="clique-num">0</strong> entraram</div>
+            </div>
+          </div>
+          <span class="badge-live ${ehTiktok ? 'badge-tiktok' : ''}">AO VIVO</span>
+        </div>
+        <div class="cheia-aviso">🔥 Live Lotada (Limite 10). Escolha outra: <button class="btn-sugestao"></button></div>
+        <div class="card-actions">
+          <a class="btn-join" target="_blank" rel="noopener noreferrer">Entrar na live</a>
+          <button class="btn-remove">✕</button>
+        </div>
+        <div class="remove-panel">
+          <input type="password" class="remove-input" placeholder="Senha da live" />
+          <div class="remove-error">Senha incorreta.</div>
+          <div class="remove-panel-actions"><button class="remove-confirm">Remover</button><button class="remove-cancel">Sair</button></div>
+        </div>
+      `;
+      card.querySelector('.card-loja').textContent = item.loja;
+      card.querySelector('.categoria-pill').textContent = item.categoria;
+      card.querySelector('.clique-num').textContent = item.cliques || 0;
+
+      const avWrap = card.querySelector('.avatar-wrap');
+      if(item.foto){
+        const img = document.createElement('img'); img.className='avatar'; img.src=item.foto;
+        img.onerror = () => { avWrap.innerHTML = ''; const fb = document.createElement('div'); fb.className='avatar avatar-fallback'; fb.style.background=corDoAvatar(item.loja); fb.textContent=item.loja.charAt(0).toUpperCase(); avWrap.appendChild(fb); };
+        avWrap.appendChild(img);
+      } else {
+        const fb = document.createElement('div'); fb.className='avatar avatar-fallback'; fb.style.background=corDoAvatar(item.loja); fb.textContent=item.loja.charAt(0).toUpperCase(); avWrap.appendChild(fb);
+      }
+
+      const joinBtn = card.querySelector('.btn-join');
+      let cliquesAtuais = item.cliques || 0;
+
+      if (cliquesAtuais >= LIMITE_ENTRADAS) {
+        joinBtn.textContent = 'Fila Cheia (Lotado)'; joinBtn.classList.add('disabled'); joinBtn.removeAttribute('href');
+      } else {
+        joinBtn.href = item.link;
+        joinBtn.addEventListener('click', async (e) => {
+          if (jaContadoNestaSessao.has(item.id)) return;
+          jaContadoNestaSessao.add(item.id);
+          const novosCliques = await incrementarClique(item.id);
+          card.querySelector('.clique-num').textContent = novosCliques;
+          if (novosCliques >= LIMITE_ENTRADAS) {
+            joinBtn.textContent = 'Fila Cheia (Lotado)'; joinBtn.classList.add('disabled'); joinBtn.removeAttribute('href');
+            await carregarERenderizar();
+          }
+        });
+      }
+
+      if (cliquesAtuais >= LIMITE_ENTRADAS){
+        let proxima = lives.find(l => l.id !== item.id && (l.cliques || 0) < LIMITE_ENTRADAS);
+        const aviso = card.querySelector('.cheia-aviso');
+        if (proxima){
+          aviso.classList.add('show'); const bS = card.querySelector('.btn-sugestao');
+          bS.textContent = 'Ir para ' + proxima.loja;
+          bS.addEventListener('click', () => { window.open(proxima.link, '_blank'); });
+        } else {
+          aviso.classList.add('show'); aviso.innerHTML = `🔥 Todas as lives estão cheias!`;
+        }
+      }
+
+      const panel = card.querySelector('.remove-panel');
+      const rInput = card.querySelector('.remove-input');
+      card.querySelector('.btn-remove').addEventListener('click', () => { panel.classList.toggle('open'); card.querySelector('.remove-error').style.display='none'; });
+      card.querySelector('.remove-cancel').addEventListener('click', () => panel.classList.remove('open'));
+      card.querySelector('.remove-confirm').addEventListener('click', async () => {
+        if (await hashSenha(rInput.value) !== item.senhaHash) { card.querySelector('.remove-error').style.display='block'; return; }
+        await removerLive(item.id); await carregarERenderizar();
+      });
+
+      grid.appendChild(card);
+    });
+  }
+
+  let todasLivesAtivas = []; let abaAtual = 'todas';
+  function renderAbaAtual(){
+    const filtradas = abaAtual === 'todas' ? todasLivesAtivas : todasLivesAtivas.filter(l => (l.plataforma || 'shopee') === abaAtual);
+    render(filtradas);
+    document.getElementById('tab-count-todas').textContent = todasLivesAtivas.length;
+    document.getElementById('tab-count-shopee').textContent = todasLivesAtivas.filter(l => (l.plataforma || 'shopee') === 'shopee').length;
+    document.getElementById('tab-count-tiktok').textContent = todasLivesAtivas.filter(l => l.plataforma === 'tiktok').length;
+  }
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      abaAtual = btn.dataset.plataforma; document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active'); renderAbaAtual();
+    });
+  });
+
+  async function carregarERenderizar(){ todasLivesAtivas = await removerExpiradas(await loadLives()); renderAbaAtual(); }
+
+  submit.addEventListener('click', async () => {
+    msg.textContent = ''; msg.classList.remove('error');
+    if (!loja.value.trim()){ msg.textContent = 'Nome da loja obrigatório.'; msg.classList.add('error'); return; }
+    if (!linkValidoParaPlataforma(link.value, plataforma.value)){ msg.textContent = 'Link inválido para a plataforma.'; msg.classList.add('error'); return; }
+    if (senha.value.length < 4){ msg.textContent = 'Senha mínima de 4 dígitos.'; msg.classList.add('error'); return; }
+
+    submit.disabled = true; const sHash = await hashSenha(senha.value);
+    const newLive = { id: 'live_'+Date.now(), loja: loja.value.trim(), link: link.value.trim(), categoria: cat.value, plataforma: plataforma.value, criadoEm: Date.now(), senhaHash: sHash, foto: foto.value.trim(), cliques: 0 };
+    
+    await salvarLive(newLive); abaAtual = 'todas';
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.plataforma === 'todas'));
+    await carregarERenderizar();
+    loja.value = ''; link.value = ''; foto.value = ''; senha.value = ''; submit.disabled = false;
+  });
+
+  carregarERenderizar();
+})();
+</script>
+</body>
+</html>
