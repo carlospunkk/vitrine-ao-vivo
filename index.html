@@ -210,9 +210,8 @@
       width: 100%;
       transition: border-color 0.2s ease;
     }
-    /* Pinta levemente as bordas de vermelho quando for do TikTok */
     .card.card-tiktok { 
-      border: 1px solid rgba(254, 44, 85, 0.3);
+      border: 1px solid rgba(254, 44, 85, 0.25);
       border-left: 4px solid var(--tiktok-pink); 
     }
 
@@ -228,6 +227,7 @@
     .plataforma-tag.tag-shopee { background: rgba(255,90,54,0.12); color: var(--coral); }
     .plataforma-tag.tag-tiktok { background: rgba(254,44,85,0.12); color: var(--tiktok-pink); }
     .categoria-pill { background: var(--surface-2); padding: 1px 6px; border-radius: 4px; font-size: 11px; }
+    .tempo-restante { font-size: 11px; color: var(--muted); }
 
     .badge-live { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--coral); background: rgba(255,90,54,0.1); border: 1px solid rgba(255,90,54,0.25); border-radius: 4px; padding: 3px 6px; display: flex; align-items: center; gap: 4px; font-weight: 700; }
     .badge-live.badge-tiktok { color: var(--tiktok-pink); background: rgba(254,44,85,0.1); border: 1px solid rgba(254,44,85,0.25); }
@@ -329,6 +329,7 @@
 <script>
 (function(){
   const LIVE_PREFIX = 'live:';
+  const PENALTY_PREFIX = 'penalty:';
   const EXPIRA_MS = 1 * 60 * 60 * 1000;
   const LIMITE_ENTRADAS = 10; 
 
@@ -376,7 +377,7 @@
   });
 
   const mockStorage = {
-    list: async () => ({ keys: Object.keys(localStorage).filter(k => k.startsWith(LIVE_PREFIX)) }),
+    list: async () => ({ keys: Object.keys(localStorage).filter(k => k.startsWith(LIVE_PREFIX) || k.startsWith(PENALTY_PREFIX)) }),
     get: async (key) => ({ value: localStorage.getItem(key) }),
     set: async (key, val) => { localStorage.setItem(key, val); },
     delete: async (key) => { localStorage.removeItem(key); }
@@ -388,30 +389,64 @@
       const listagem = await storageContext.list(LIVE_PREFIX, true);
       if (!listagem || !listagem.keys) return [];
       const resultados = await Promise.all(listagem.keys.map(async (k) => {
+        if (!k.startsWith(LIVE_PREFIX)) return null;
         const r = await storageContext.get(k, true); return r && r.value ? JSON.parse(r.value) : null;
       }));
       return resultados.filter(Boolean);
-    } catch(e){ return []; }
+    } catch(e) { return []; }
   }
 
   async function salvarLive(live){ try{ await storageContext.set(LIVE_PREFIX+live.id, JSON.stringify(live), true); }catch(e){} }
   async function removerLive(id){ try{ await storageContext.delete(LIVE_PREFIX+id, true); }catch(e){} }
 
-  async function removerExpiradas(lives){
-    const agora = Date.now();
-    const expiradas = lives.filter(l => (agora - l.criadoEm) >= EXPIRA_MS);
-    if (expiradas.length > 0) await Promise.all(expiradas.map(l => removerLive(l.id)));
-    return lives.filter(l => (agora - l.criadoEm) < EXPIRA_MS);
+  async function registrarPenalidade(nomeLoja){
+    try {
+      const key = PENALTY_PREFIX + btoa(nomeLoja.trim().toLowerCase());
+      await storageContext.set(key, "true", true);
+    } catch(e){}
   }
 
-  const jaContadoNestaSessao = new Set();
+  async function checarEExcluirPenalidade(nomeLoja){
+    try {
+      const key = PENALTY_PREFIX + btoa(nomeLoja.trim().toLowerCase());
+      const r = await storageContext.get(key, true);
+      if (r && r.value === "true") {
+        await storageContext.delete(key, true);
+        return true;
+      }
+      return false;
+    } catch(e){ return false; }
+  }
+
+  async function removerExpiradas(lives){
+    const agora = Date.now();
+    const expiradas = lives.filter(l => (agora - (l.criadoOriginal || l.criadoEm)) >= EXPIRA_MS);
+    if (expiradas.length > 0) await Promise.all(expiradas.map(l => removerLive(l.id)));
+    return lives.filter(l => (agora - (l.criadoOriginal || l.criadoEm)) < EXPIRA_MS);
+  }
+
   async function incrementarClique(id){
     try {
       const r = await storageContext.get(LIVE_PREFIX + id, true); if (!r || !r.value) return 0;
       const alvo = JSON.parse(r.value); alvo.cliques = (alvo.cliques || 0) + 1;
+      
+      if (alvo.cliques >= LIMITE_ENTRADAS) {
+        await registrarPenalidade(alvo.loja);
+      }
+      
       await storageContext.set(LIVE_PREFIX + id, JSON.stringify(alvo), true);
       return alvo.cliques;
     } catch(e){ return 0; }
+  }
+
+  function timeAgo(ts){
+    const diffMs = Date.now() - ts;
+    const min = Math.floor(diffMs / 60000);
+    if (min < 1) return 'agora';
+    if (min < 60) return 'há ' + min + ' min';
+    const h = Math.floor(min / 60);
+    if (h < 24) return 'há ' + h + 'h';
+    return 'há ' + Math.floor(h / 24) + 'd';
   }
 
   function render(lives){
@@ -455,7 +490,7 @@
       card.querySelector('.card-loja').textContent = item.loja;
       card.querySelector('.categoria-pill').textContent = item.categoria;
       card.querySelector('.clique-num').textContent = item.cliques || 0;
-      card.querySelector('.tempo-restante').textContent = timeAgo(item.criadoEm);
+      card.querySelector('.tempo-restante').textContent = timeAgo(item.criadoOriginal || item.criadoEm);
 
       const avWrap = card.querySelector('.avatar-wrap');
       if(item.foto){
@@ -474,8 +509,6 @@
       } else {
         joinBtn.href = item.link;
         joinBtn.addEventListener('click', async () => {
-          if (jaContadoNestaSessao.has(item.id)) return;
-          jaContadoNestaSessao.add(item.id);
           const novosCliques = await incrementarClique(item.id);
           card.querySelector('.clique-num').textContent = novosCliques;
           if (novosCliques >= LIMITE_ENTRADAS) {
@@ -530,12 +563,30 @@
 
   submit.addEventListener('click', async () => {
     msg.textContent = ''; msg.classList.remove('error');
-    if (!loja.value.trim()){ msg.textContent = 'Nome da loja obrigatório.'; msg.classList.add('error'); return; }
+    const nomeLoja = loja.value.trim();
+    if (!nomeLoja){ msg.textContent = 'Nome da loja obrigatório.'; msg.classList.add('error'); return; }
     if (!linkValidoParaPlataforma(link.value, plataforma.value)){ msg.textContent = 'Link inválido para a plataforma.'; msg.classList.add('error'); return; }
     if (senha.value.length < 4){ msg.textContent = 'Senha mínima de 4 dígitos.'; msg.classList.add('error'); return; }
 
     submit.disabled = true; const sHash = await hashSenha(senha.value);
-    const newLive = { id: 'live_'+Date.now(), loja: loja.value.trim(), link: link.value.trim(), categoria: cat.value, plataforma: plataforma.value, criadoEm: Date.now(), senhaHash: sHash, foto: foto.value.trim(), cliques: 0 };
+    
+    // Regra de Cooldown: Se a loja já lotou uma vez, joga o timestamp da nova live 1 hora pra trás (final da fila)
+    const sofreuPenalidade = await checarEExcluirPenalidade(nomeLoja);
+    const timestampAtual = Date.now();
+    const timestampRegistro = sofreuPenalidade ? (timestampAtual - EXPIRA_MS + 1000) : timestampAtual;
+
+    const newLive = { 
+      id: 'live_'+timestampAtual, 
+      loja: nomeLoja, 
+      link: link.value.trim(), 
+      categoria: cat.value, 
+      plataforma: plataforma.value, 
+      criadoEm: timestamp創造 = timestampRegistro,
+      criadoOriginal: timestampAtual,
+      senhaHash: sHash, 
+      foto: foto.value.trim(), 
+      cliques: 0 
+    };
     
     await salvarLive(newLive); abaAtual = 'todas';
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.plataforma === 'todas'));
